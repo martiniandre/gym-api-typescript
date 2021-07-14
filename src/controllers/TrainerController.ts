@@ -11,6 +11,7 @@ interface IUsers{
 }
 
 interface ITrainer  {
+    _id?: string
     email:string
     firstName: string
     lastName: string
@@ -43,15 +44,16 @@ class TrainerController {
 
     async updateTrainer (req:Request,res:Response){
         const { id } = req.params
-        const { email,firstName, lastName }:ITrainer= req.body
+        const trainer:ITrainer= req.body
         const isTrainerValid = await Trainer.findOne({_id: id})
 
         if(!isTrainerValid) return res.status(402).json({
-            error: "TrainerID not found",
+            error: "Trainer ID not found",
             success:false,
         })
-
-        const updateTrainer = await isTrainerValid.updateOne({ $set: { email,firstName,lastName } })
+        delete trainer._id
+        
+        const updateTrainer = await isTrainerValid.updateOne({ $set: trainer })
         return res.status(200).json({
             ...updateTrainer,
             success:true

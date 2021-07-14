@@ -28,8 +28,7 @@ class AuthController {
         }).status(401)
 
         if(user.email === email && hashPassword){
-            const id = 1; //esse id viria do banco de dados
-            const token = jwt.sign({ id }, SECRET , {
+            const token = jwt.sign({ id: user._id }, SECRET , {
                 expiresIn: 21600// expires in 5min
             });
             return res.json({ authenticated: true, token: token,user });
